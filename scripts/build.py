@@ -123,8 +123,8 @@ def head(title, desc, active=""):
       <button class="nav__toggle" aria-label="Menu" aria-expanded="false"><span></span><span></span><span></span></button>
       <div class="nav__links">{links}</div>
       <div class="nav__cta">
-        <a class="btn btn--ghost-light btn--sm" href="#" aria-disabled="true">Sign in</a>
-        <a class="btn btn--primary btn--sm" href="courses.html">Start training</a>
+        <a class="btn btn--ghost-light btn--sm" href="login.html">Sign in</a>
+        <a class="btn btn--primary btn--sm" href="login.html">Start training</a>
       </div>
     </nav>
   </div>

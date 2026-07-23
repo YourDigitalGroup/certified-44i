@@ -2,10 +2,11 @@
 node_modules/
 package-lock.json
 
-# Local secrets / config (never commit real keys)
+# Server-side secrets only (service_role key, ElevenLabs, etc.) — never commit
 .env
 .env.*
-assets/js/config.js
+# Note: assets/js/config.js holds only the PUBLIC anon key and is committed so
+# the static site works when deployed. RLS protects the data.
 
 # Generated preview screenshots + throwaway browser helpers
 scripts/shot-*.png
