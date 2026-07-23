@@ -1,11 +1,17 @@
-# Dependencies / build tooling (only needed for local screenshots)
+# Dependencies
 node_modules/
-package.json
 package-lock.json
 
-# Generated preview screenshots
+# Local secrets / config (never commit real keys)
+.env
+.env.*
+assets/js/config.js
+
+# Generated preview screenshots + throwaway browser helpers
 scripts/shot-*.png
-scripts/*.mjs
+scripts/shoot.mjs
+scripts/test.mjs
+scripts/qt.mjs
 
 # Local reference copies (source lives in main at .oldsite/)
 scripts/oldsite-*.css
