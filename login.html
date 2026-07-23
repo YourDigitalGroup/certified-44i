@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sign in — CERTIFIED.44i</title>
+<link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap">
+    <nav class="nav" aria-label="Primary">
+      <a class="brand" href="index.html">
+        <img class="brand__mark" src="assets/img/logomark.svg" alt="">
+        <span>CERTIFIED<em>.44i</em></span>
+      </a>
+    </nav>
+  </div>
+</header>
+
+<main>
+<section class="section" style="min-height:70vh;display:grid;place-items:center">
+  <div class="wrap" style="max-width:460px">
+
+    <!-- Step 1: group login -->
+    <div class="sticky-card" id="step-group">
+      <div class="sticky-card__body">
+        <div class="eyebrow">Group sign in</div>
+        <h1 style="font-size:1.6rem;margin:0 0 6px">Enter your team's code</h1>
+        <p style="color:var(--muted);margin:0 0 20px">Your account manager gives you the group code and password.</p>
+        <form id="group-form" autocomplete="off">
+          <label style="font-weight:600;font-size:.9rem" for="group-code">Group code</label>
+          <input class="input" id="group-code" name="code" placeholder="e.g. acme-partners"
+                 style="background:var(--paper-2);color:var(--ink);border-color:var(--line);margin:6px 0 14px;width:100%">
+          <label style="font-weight:600;font-size:.9rem" for="group-pw">Password</label>
+          <input class="input" id="group-pw" name="password" type="password" placeholder="Group password"
+                 style="background:var(--paper-2);color:var(--ink);border-color:var(--line);margin:6px 0 18px;width:100%">
+          <button class="btn btn--primary" type="submit" style="width:100%;justify-content:center">Continue</button>
+        </form>
+        <div id="group-error" class="note" style="display:none;margin-top:16px;background:#fdecea;border-color:#f5c6c2;border-left-color:#d95028;color:#8a2a17"></div>
+      </div>
+    </div>
+
+    <!-- Step 2: pick your name -->
+    <div class="sticky-card hidden" id="step-name">
+      <div class="sticky-card__body">
+        <div class="eyebrow" id="group-name-label">Your group</div>
+        <h1 style="font-size:1.6rem;margin:0 0 6px">Who are you?</h1>
+        <p style="color:var(--muted);margin:0 0 18px">Select your name to continue to your training.</p>
+        <div id="ae-list" class="meta-list" style="max-height:340px;overflow:auto"></div>
+        <button class="btn btn--ghost btn--sm" id="back-btn" style="margin-top:16px">← Different group</button>
+      </div>
+    </div>
+
+  </div>
+</section>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="assets/js/config.js"></script>
+<script src="assets/js/app.js"></script>
+<script>
+(function () {
+  var stepGroup = document.getElementById("step-group");
+  var stepName = document.getElementById("step-name");
+  var errEl = document.getElementById("group-error");
+
+  function showError(msg) { errEl.textContent = msg; errEl.style.display = "block"; }
+  function clearError() { errEl.style.display = "none"; }
+
+  document.getElementById("group-form").addEventListener("submit", async function (e) {
+    e.preventDefault();
+    clearError();
+    var code = document.getElementById("group-code").value;
+    var pw = document.getElementById("group-pw").value;
+    var btn = e.target.querySelector("button");
+    btn.disabled = true; btn.textContent = "Checking…";
+    try {
+      await Certified.groupLogin(code, pw);
+      await showNameStep();
+    } catch (err) {
+      showError(err.message === "Invalid login credentials"
+        ? "That group code or password isn't right. Check with your account manager."
+        : (err.message || "Sign in failed."));
+    } finally {
+      btn.disabled = false; btn.textContent = "Continue";
+    }
+  });
+
+  async function showNameStep() {
+    var group = await Certified.getMyGroup();
+    document.getElementById("group-name-label").textContent = group ? group.name : "Your group";
+    var aes = await Certified.listMyAEs();
+    var list = document.getElementById("ae-list");
+    list.innerHTML = "";
+    if (!aes.length) {
+      list.innerHTML = "<p style='color:var(--muted)'>No names are set up for this group yet. Ask your account manager.</p>";
+    }
+    aes.forEach(function (ae) {
+      var b = document.createElement("button");
+      b.className = "opt";
+      b.style.width = "100%";
+      b.style.marginBottom = "8px";
+      b.innerHTML = "<span>" + ae.full_name.replace(/[&<>]/g, "") + "</span>";
+      b.addEventListener("click", function () {
+        Certified.setActiveAE({ id: ae.id, full_name: ae.full_name });
+        window.location.href = "learn.html";
+      });
+      list.appendChild(b);
+    });
+    stepGroup.classList.add("hidden");
+    stepName.classList.remove("hidden");
+  }
+
+  document.getElementById("back-btn").addEventListener("click", async function () {
+    await Certified.signOut();
+    stepName.classList.add("hidden");
+    stepGroup.classList.remove("hidden");
+  });
+
+  // If already signed in, jump straight to name selection.
+  Certified.getSession().then(function (s) { if (s) showNameStep(); });
+})();
+</script>
+</body>
+</html>

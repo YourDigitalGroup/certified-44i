@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>My Training — CERTIFIED.44i</title>
+<link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap">
+    <nav class="nav" aria-label="Primary">
+      <a class="brand" href="index.html">
+        <img class="brand__mark" src="assets/img/logomark.svg" alt="">
+        <span>CERTIFIED<em>.44i</em></span>
+      </a>
+      <div class="nav__cta" style="margin-left:auto">
+        <span id="who" style="color:var(--muted-on-dark);font-size:.9rem;margin-right:14px"></span>
+        <button class="btn btn--ghost-light btn--sm" id="signout">Sign out</button>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<main>
+<section class="page-hero" style="padding:48px 0 40px">
+  <div class="wrap">
+    <div class="crumbs">My Training</div>
+    <h1 id="course-title" style="font-size:clamp(1.6rem,3vw,2.2rem)">Loading…</h1>
+    <p class="lead" id="course-sub"></p>
+    <div style="margin-top:16px;max-width:420px">
+      <div style="height:8px;background:rgba(255,255,255,.15);border-radius:999px;overflow:hidden">
+        <div id="progress-bar" style="height:100%;width:0;background:var(--cyan);transition:width .4s"></div>
+      </div>
+      <div id="progress-text" style="color:var(--muted-on-dark);font-size:.85rem;margin-top:8px"></div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap" style="max-width:820px">
+    <div id="blocks" class="curriculum"></div>
+    <p class="note" id="notice" style="margin-top:20px;display:none"></p>
+  </div>
+</section>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="assets/js/config.js"></script>
+<script src="assets/js/app.js"></script>
+<script>
+(function () {
+  var IC_PLAY = '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>';
+  var IC_CHECK = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6 9 17l-5-5"/></svg>';
+  var IC_LOCK = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>';
+
+  document.getElementById("signout").addEventListener("click", async function () {
+    await Certified.signOut();
+    window.location.href = "login.html";
+  });
+
+  async function main() {
+    var session = await Certified.getSession();
+    var ae = Certified.getActiveAE();
+    if (!session || !ae) { window.location.href = "login.html"; return; }
+
+    var group = await Certified.getMyGroup();
+    document.getElementById("who").textContent =
+      ae.full_name + (group ? " · " + group.name : "");
+
+    var data = await Certified.getCourseWithProgress("process-certification");
+    if (!data) {
+      document.getElementById("course-title").textContent = "No course found";
+      return;
+    }
+    document.getElementById("course-title").textContent = data.course.title;
+    document.getElementById("course-sub").textContent = data.course.description || "";
+
+    var total = data.blocks.length;
+    var done = data.blocks.filter(function (b) { return b.completed; }).length;
+    var pct = total ? Math.round(done / total * 100) : 0;
+    document.getElementById("progress-bar").style.width = pct + "%";
+    document.getElementById("progress-text").textContent =
+      done + " of " + total + " sections complete · " + pct + "%";
+
+    var wrap = document.getElementById("blocks");
+    wrap.innerHTML = "";
+    data.blocks.forEach(function (b, i) {
+      var state = b.completed ? "completed" : (b.available ? "available" : "locked");
+      var icon = b.completed
+        ? '<span class="ico" style="color:var(--ok)">' + IC_CHECK + '</span>'
+        : (b.available ? '<span class="ico" style="color:var(--accent-600)">' + IC_PLAY + '</span>'
+                       : '<span class="ico">' + IC_LOCK + '</span>');
+      var right = b.completed ? "<span class='type' style='color:var(--ok)'>Completed</span>"
+        : (b.available ? "<span class='type' style='color:var(--accent-600)'>Ready</span>"
+                       : "<span class='type'>Locked</span>");
+      var row = document.createElement("div");
+      row.className = "acc";
+      row.innerHTML =
+        '<div class="acc__head" style="cursor:default">' +
+          '<span class="acc__idx">' + (i + 1) + '</span>' +
+          '<span>' + b.title.replace(/[&<>]/g, "") + '</span>' +
+          '<span class="acc__count">' + icon + " " + right + '</span>' +
+        '</div>';
+      wrap.appendChild(row);
+    });
+
+    var notice = document.getElementById("notice");
+    notice.style.display = "block";
+    notice.innerHTML = "<b>Preview build.</b> Sign-in, your group, your name, and your real progress are live from the database. The <b>video player and 100%-quiz step</b> are the next build (they need one more database function, coming next).";
+  }
+
+  main().catch(function (e) {
+    document.getElementById("course-title").textContent = "Something went wrong";
+    document.getElementById("course-sub").textContent = e.message || String(e);
+  });
+})();
+</script>
+</body>
+</html>

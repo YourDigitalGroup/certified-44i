@@ -1,0 +1,25 @@
+# Dependencies
+node_modules/
+package-lock.json
+
+# Server-side secrets only (service_role key, ElevenLabs, etc.) — never commit
+.env
+.env.*
+# Note: assets/js/config.js holds only the PUBLIC anon key and is committed so
+# the static site works when deployed. RLS protects the data.
+
+# Generated preview screenshots + throwaway browser helpers
+scripts/shot-*.png
+scripts/shoot.mjs
+scripts/test.mjs
+scripts/qt.mjs
+
+# Local reference copies (source lives in main at .oldsite/)
+scripts/oldsite-*.css
+
+# OS / editor
+.DS_Store
+Thumbs.db
+*.swp
+.vscode/
+.idea/
