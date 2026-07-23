@@ -1,0 +1,638 @@
+{
+  "site": {
+    "title": "CERTIFIED.44i",
+    "url": "https://certified.44i.com",
+    "tagline": "44 Interactive Digital Certification"
+  },
+  "courses": [
+    {
+      "title": "Process Certification",
+      "slug": "101-process-certification",
+      "description": "To successfully complete each section and attain certification, you are required to view a concise topical video and subsequently complete a quiz. A perfect score of 100% on each quiz is mandatory for advancement. You have the option to rewatch videos as needed and are required to watch the videos in order. Upon the successful completion of a section, you will be authorized to print your Digital Certification certificate.",
+      "level": "beginner",
+      "students": "72",
+      "passing": "100",
+      "duration": "0 hour",
+      "sections": [
+        {
+          "title": "Your Digital Agency",
+          "items": [
+            {
+              "id": "590",
+              "type": "lesson",
+              "title": "Your Digital Agency Video",
+              "duration": "12 minute"
+            },
+            {
+              "id": "594",
+              "type": "quiz",
+              "title": "Your Digital Agency Quiz",
+              "duration": "10 minute"
+            }
+          ]
+        },
+        {
+          "title": "Resource Section",
+          "items": [
+            {
+              "id": "143",
+              "type": "lesson",
+              "title": "Resource Section Video",
+              "duration": "12 minute"
+            },
+            {
+              "id": "144",
+              "type": "quiz",
+              "title": "Resource Section Quiz",
+              "duration": "10 minute"
+            }
+          ]
+        },
+        {
+          "title": "Trello Basics",
+          "items": [
+            {
+              "id": "386",
+              "type": "lesson",
+              "title": "Trello Basics Video",
+              "duration": "14 minute"
+            },
+            {
+              "id": "518",
+              "type": "quiz",
+              "title": "Trello Basics Quiz",
+              "duration": "10 minute"
+            }
+          ]
+        },
+        {
+          "title": "Digital Audit",
+          "items": [
+            {
+              "id": "388",
+              "type": "lesson",
+              "title": "Digital Audit Video",
+              "duration": "14 minute"
+            },
+            {
+              "id": "530",
+              "type": "quiz",
+              "title": "Digital Audit Quiz",
+              "duration": "10 minute"
+            }
+          ]
+        },
+        {
+          "title": "Client Needs Analysis",
+          "items": [
+            {
+              "id": "390",
+              "type": "lesson",
+              "title": "Client Needs Analysis Video",
+              "duration": "15 minute"
+            },
+            {
+              "id": "542",
+              "type": "quiz",
+              "title": "Client Needs Analysis Quiz",
+              "duration": "10 minute"
+            }
+          ]
+        },
+        {
+          "title": "Request for Recommendation",
+          "items": [
+            {
+              "id": "392",
+              "type": "lesson",
+              "title": "Request for Recommendation Video",
+              "duration": "8 minute"
+            },
+            {
+              "id": "560",
+              "type": "quiz",
+              "title": "Request for Recommendation Quiz",
+              "duration": "10 minute"
+            }
+          ]
+        },
+        {
+          "title": "Insertion Orders",
+          "items": [
+            {
+              "id": "620",
+              "type": "lesson",
+              "title": "Insertion Order Video",
+              "duration": "4 minute"
+            },
+            {
+              "id": "621",
+              "type": "quiz",
+              "title": "Insertion Order Quiz",
+              "duration": "10 minute"
+            }
+          ]
+        },
+        {
+          "title": "Intake Form Training",
+          "items": [
+            {
+              "id": "634",
+              "type": "lesson",
+              "title": "Intake Form Training Video",
+              "duration": "12 minute"
+            },
+            {
+              "id": "635",
+              "type": "quiz",
+              "title": "Intake Form Training Quiz",
+              "duration": "10 minute"
+            }
+          ]
+        },
+        {
+          "title": "Reporting",
+          "items": [
+            {
+              "id": "648",
+              "type": "lesson",
+              "title": "Reporting Video",
+              "duration": "0 minute"
+            },
+            {
+              "id": "649",
+              "type": "quiz",
+              "title": "Reporting Quiz",
+              "duration": "10 minute"
+            }
+          ]
+        }
+      ],
+      "welcome": {
+        "title": "Welcome!",
+        "content": "Welcome to the 44i Digital Certification course. This comprehensive course is structured into three distinct sections: Process, Digital 101, and Digital 201. Kindly ensure that your complete first and last name are accurately registered in your profile. To successfully complete each section and attain certification, you are required to view a concise topical video and subsequently complete a quiz. A perfect score of 100% on each quiz is mandatory for advancement. You have the option to rewatch videos as needed and are required to watch the videos in order. Upon the successful completion of a section, you will be authorized to print your Digital Certification certificate."
+      },
+      "total_items": {
+        "count_items": "18",
+        "lp_lesson": "9",
+        "lp_quiz": "9"
+      }
+    },
+    {
+      "title": "101 - Products Certification",
+      "slug": "101-products-certification",
+      "description": "",
+      "level": "intermediate",
+      "students": "72",
+      "passing": "80",
+      "duration": "0 week",
+      "sections": [
+        {
+          "title": "Digital House Selling",
+          "items": [
+            {
+              "id": "350",
+              "type": "lesson",
+              "title": "Digital House Video",
+              "duration": "0 minute"
+            },
+            {
+              "id": "351",
+              "type": "quiz",
+              "title": "Digital House Quiz",
+              "duration": "10 minute"
+            }
+          ]
+        },
+        {
+          "title": "Google my Business",
+          "items": [
+            {
+              "id": "400",
+              "type": "lesson",
+              "title": "GMB Video",
+              "duration": "0 minute"
+            },
+            {
+              "id": "401",
+              "type": "quiz",
+              "title": "GMB Quiz",
+              "duration": "10 minute"
+            }
+          ]
+        },
+        {
+          "title": "Website",
+          "items": [
+            {
+              "id": "404",
+              "type": "lesson",
+              "title": "Website Video",
+              "duration": "0 minute"
+            },
+            {
+              "id": "405",
+              "type": "quiz",
+              "title": "Website Quiz",
+              "duration": "10 minute"
+            }
+          ]
+        },
+        {
+          "title": "Search Engine Optimization",
+          "items": [
+            {
+              "id": "408",
+              "type": "lesson",
+              "title": "SEO Video",
+              "duration": "0 minute"
+            },
+            {
+              "id": "409",
+              "type": "quiz",
+              "title": "SEO Quiz",
+              "duration": "10 minute"
+            }
+          ]
+        },
+        {
+          "title": "Social Media Management",
+          "items": [
+            {
+              "id": "412",
+              "type": "lesson",
+              "title": "Social Media Management Video",
+              "duration": "0 minute"
+            },
+            {
+              "id": "413",
+              "type": "quiz",
+              "title": "Social Media Management Quiz",
+              "duration": "10 minute"
+            }
+          ]
+        },
+        {
+          "title": "Email Marketing",
+          "items": [
+            {
+              "id": "416",
+              "type": "lesson",
+              "title": "Email Marketing Video",
+              "duration": "0 minute"
+            },
+            {
+              "id": "417",
+              "type": "quiz",
+              "title": "Email Marketing Quiz",
+              "duration": "10 minute"
+            }
+          ]
+        },
+        {
+          "title": "Local Listing Optimization",
+          "items": [
+            {
+              "id": "429",
+              "type": "lesson",
+              "title": "LLO Video",
+              "duration": "0 minute"
+            },
+            {
+              "id": "430",
+              "type": "quiz",
+              "title": "LLO Quiz",
+              "duration": "10 minute"
+            }
+          ]
+        },
+        {
+          "title": "Reputation Management & Monitoring",
+          "items": [
+            {
+              "id": "431",
+              "type": "lesson",
+              "title": "Rep Management Video",
+              "duration": "0 minute"
+            },
+            {
+              "id": "432",
+              "type": "quiz",
+              "title": "Rep Management Quiz",
+              "duration": "10 minute"
+            }
+          ]
+        }
+      ],
+      "total_items": {
+        "count_items": "16",
+        "lp_lesson": "8",
+        "lp_quiz": "8"
+      }
+    },
+    {
+      "title": "201 - Products Certification",
+      "slug": "201-products-certification",
+      "description": "",
+      "level": "expert",
+      "students": "72",
+      "passing": "80",
+      "duration": "0 week",
+      "sections": [
+        {
+          "title": "SEM",
+          "items": [
+            {
+              "id": "337",
+              "type": "lesson",
+              "title": "SEM Video",
+              "duration": "15 minute"
+            },
+            {
+              "id": "338",
+              "type": "quiz",
+              "title": "SEM Quiz",
+              "duration": "10 minute"
+            }
+          ]
+        }
+      ],
+      "total_items": {
+        "count_items": "2",
+        "lp_lesson": "1",
+        "lp_quiz": "1"
+      }
+    },
+    {
+      "title": "Packages Certification",
+      "slug": "packages-certification",
+      "description": "",
+      "level": "",
+      "students": "72",
+      "passing": "80",
+      "duration": "0 hour",
+      "sections": [
+        {
+          "title": "Introduction",
+          "items": [
+            {
+              "id": "228",
+              "type": "lesson",
+              "title": "Digital Overview",
+              "duration": "1 minute"
+            },
+            {
+              "id": "229",
+              "type": "lesson",
+              "title": "Digital Services",
+              "duration": "5 minute"
+            }
+          ]
+        },
+        {
+          "title": "Digital Sales Tools",
+          "items": [
+            {
+              "id": "234",
+              "type": "lesson",
+              "title": "Overcoming Sales Objections",
+              "duration": "0 minute"
+            },
+            {
+              "id": "237",
+              "type": "lesson",
+              "title": "Key Phrases for Closing the Sale",
+              "duration": "0 minute"
+            },
+            {
+              "id": "239",
+              "type": "lesson",
+              "title": "Digital Decision Tree",
+              "duration": "0 minute"
+            },
+            {
+              "id": "244",
+              "type": "lesson",
+              "title": "Follow-up Best Practices",
+              "duration": "0 minute"
+            },
+            {
+              "id": "245",
+              "type": "lesson",
+              "title": "Package Workshop",
+              "duration": "0 minute"
+            }
+          ]
+        },
+        {
+          "title": "Resources, Trello & Site Visits",
+          "items": [
+            {
+              "id": "246",
+              "type": "lesson",
+              "title": "Access Your Resource Center",
+              "duration": "0 minute"
+            },
+            {
+              "id": "247",
+              "type": "lesson",
+              "title": "Client Needs Analysis (CNA)",
+              "duration": "0 minute"
+            },
+            {
+              "id": "248",
+              "type": "lesson",
+              "title": "Digital Audit Tool",
+              "duration": "0 minute"
+            },
+            {
+              "id": "249",
+              "type": "lesson",
+              "title": "Client Presentations & Editable Client Budget",
+              "duration": "0 minute"
+            },
+            {
+              "id": "252",
+              "type": "lesson",
+              "title": "Insertion Order",
+              "duration": "0 minute"
+            },
+            {
+              "id": "253",
+              "type": "lesson",
+              "title": "Request for Proposal & Quote Upon Request",
+              "duration": "0 minute"
+            },
+            {
+              "id": "255",
+              "type": "lesson",
+              "title": "CPM/CPC Calculator",
+              "duration": "0 minute"
+            },
+            {
+              "id": "256",
+              "type": "lesson",
+              "title": "Monthly Reporting",
+              "duration": "0 minute"
+            },
+            {
+              "id": "257",
+              "type": "lesson",
+              "title": "Ongoing Video Training",
+              "duration": "0 minute"
+            },
+            {
+              "id": "258",
+              "type": "lesson",
+              "title": "Using Trello",
+              "duration": "0 minute"
+            },
+            {
+              "id": "259",
+              "type": "lesson",
+              "title": "Site Visits",
+              "duration": "0 minute"
+            }
+          ]
+        },
+        {
+          "title": "Marketing & Promotion",
+          "items": [
+            {
+              "id": "260",
+              "type": "lesson",
+              "title": "Sales One-Sheet",
+              "duration": "0 minute"
+            },
+            {
+              "id": "261",
+              "type": "lesson",
+              "title": "Website Banner Ads",
+              "duration": "0 minute"
+            },
+            {
+              "id": "262",
+              "type": "lesson",
+              "title": "Radio Scripts",
+              "duration": "0 minute"
+            },
+            {
+              "id": "263",
+              "type": "lesson",
+              "title": "Social Media Strategy",
+              "duration": "0 minute"
+            },
+            {
+              "id": "264",
+              "type": "lesson",
+              "title": "Email Marketing Content",
+              "duration": "0 minute"
+            }
+          ]
+        },
+        {
+          "title": "Your Digital Agency",
+          "items": [
+            {
+              "id": "265",
+              "type": "lesson",
+              "title": "Why Offer Digital Agency Services?",
+              "duration": "0 minute"
+            },
+            {
+              "id": "266",
+              "type": "lesson",
+              "title": "Local Business Needs & Challenges",
+              "duration": "0 minute"
+            },
+            {
+              "id": "267",
+              "type": "lesson",
+              "title": "A Consultive Needs-Based Approach",
+              "duration": "0 minute"
+            },
+            {
+              "id": "268",
+              "type": "lesson",
+              "title": "Agency Product Mix",
+              "duration": "0 minute"
+            },
+            {
+              "id": "269",
+              "type": "lesson",
+              "title": "Cross Platform Audience Targeting",
+              "duration": "0 minute"
+            },
+            {
+              "id": "270",
+              "type": "lesson",
+              "title": "First Step",
+              "duration": "0 minute"
+            },
+            {
+              "id": "271",
+              "type": "lesson",
+              "title": "Your Digital Agency Website",
+              "duration": "0 minute"
+            },
+            {
+              "id": "272",
+              "type": "lesson",
+              "title": "Client Presentations",
+              "duration": "0 minute"
+            }
+          ]
+        }
+      ],
+      "total_items": {
+        "count_items": "31",
+        "lp_lesson": "31",
+        "lp_quiz": "0"
+      }
+    }
+  ],
+  "certs": [
+    {
+      "title": "Certified:101 Online Visibility",
+      "slug": "certified-bottom-of-house"
+    },
+    {
+      "title": "Certified:201 Content Marketing",
+      "slug": "certified201-content-marketing"
+    },
+    {
+      "title": "Certified:301 Targeted Digital",
+      "slug": "certified301-targeted-digital"
+    }
+  ],
+  "ranks": [
+    {
+      "title": "Welcome",
+      "min": "1",
+      "max": "1"
+    },
+    {
+      "title": "101 Process",
+      "min": "2",
+      "max": "3"
+    },
+    {
+      "title": "101 Products",
+      "min": "4",
+      "max": "5"
+    },
+    {
+      "title": "201 Products",
+      "min": "6",
+      "max": "7"
+    },
+    {
+      "title": "Packages",
+      "min": "8",
+      "max": "9999999"
+    }
+  ],
+  "pages": {
+    "privacy": "<!-- wp:heading -->\n<h2 class=\"wp-block-heading\">44i Inc. Privacy Policy</h2>\n<!-- /wp:heading -->\n\n<!-- wp:paragraph -->\n<p>44i Inc. (the \u201cCompany\u201d) is committed to protecting the privacy of its users. This Privacy Policy (\u201cPrivacy Policy\u201d) is designed to help you understand what information we gather, how we use it, what we do to protect it, and to assist you in making informed decisions when using our Site. We own and operate https://certified.44i.com (the \"Site\"). This page informs you of our policies regarding the collection, use and disclosure of Personal and Non-Personal Information we receive from users of the Site.</p>\n<!-- /wp:paragraph -->\n\n<!-- wp:paragraph -->\n<p>We use this information only for providing and improving the Site. By using the Site, you agree to the collection and use of information in accordance with this policy.</p>\n<!-- /wp:paragraph -->\n\n<!-- wp:paragraph -->\n<p>By accessing our website, you accept our Privacy Policy, and you consent to our collection, storage, use and disclosure of your personal information as described in this Privacy Policy. Each time you visit our website, and any time you voluntarily provide us with information, you agree that you are consenting to our collection, use and disclosure of the information that you provide, and you are consenting to receive emails or otherwise be contacted, as described in this Privacy Policy. Whether or not you register or create any kind of account with us, this Privacy Policy applies to all users of the website.</p>\n<!-- /wp:paragraph -->\n\n<!-- wp:heading -->\n<h2 class=\"wp-block-heading\">Information Collection And Use</h2>\n<!-- /wp:heading -->\n\n<!-- wp:paragraph -->\n<p>While using our Site, we may ask you to provide us with certain personally identifiable information that can be used to contact or identify you. Personally identifiable information may include, but is not limited to your name and/or email address (\"Personal Information\").</p>\n<!-- /wp:paragraph -->\n\n<!-- wp:paragraph -->\n<p>Like many site operators, we collect information that your browser sends whenever you visit our Site (\"Log Data\"). This Log Data may include information such as your computer\u2019s Internet Protocol (\"IP\") address, browser type, browser version, the pages of our Site that you visit, the time and date of your visit, the time spent on those pages and other statistics.</p>\n<!-- /wp:paragraph -->\n\n<!-- wp:paragraph -->\n<p>We use this information for, among other things, to provide general statistics regarding use of the website and for other business purposes. We track this information using cookies, or small text files that include an anonymous unique identifier. Cookies are sent to a user\u2019s browser from our servers and are stored on the user\u2019s computer hard drive. Sending a cookie to a user\u2019s browser enables us to collect Non-Personal Information about that user and keep a record of the user\u2019s preferences when utilizing our services, both on an individual and aggregate basis.&nbsp;Cookies can be removed by following your Internet browser help file directions. If you choose to disable cookies, some areas of the Site may not work properly.</p>\n<!-- /wp:paragraph -->\n\n<!-- wp:heading -->\n<h2 class=\"wp-block-heading\">Children Under the Age of 13</h2>\n<!-- /wp:heading -->\n\n<!-- wp:paragraph -->\n<p>Our Site is not intended for children under 13 years of age. We do not knowingly collect personal information from children under 13, and ask that users under the age of 13 do not provide any information on this Site.</p>\n<!-- /wp:paragraph -->\n\n<!-- wp:heading -->\n<h2 class=\"wp-block-heading\">Communications</h2>\n<!-- /wp:heading -->\n\n<!-- wp:paragraph -->\n<p>We may use your Personal Information to contact you with newsletters, marketing or promotional materials and other information.</p>\n<!-- /wp:paragraph -->\n\n<!-- wp:paragraph -->\n<p>We do not sell, trade, rent or otherwise share your Personal Information with third parties without your consent. We may share your Personal Information with vendors and other third-party providers who are performing services for the Company. In general, the vendors and third-party providers used by us will only collect, use and disclose your information to the extent necessary to allow them to perform the services they provide for the Company.</p>\n<!-- /wp:paragraph -->\n\n<!-- wp:paragraph -->\n<p>We use Non-Personal Information to help us improve the Site and customize the user experience. We also aggregate Non-Personal Information in order to track trends and analyze use patterns of usage. This Privacy Policy does not limit in any way our use or disclosure of Non-Personal Information and we reserve the right to use and disclose such Non-Personal Information to our partners, advertisers and other third parties at our sole discretion.</p>\n<!-- /wp:paragraph -->\n\n<!-- wp:heading -->\n<h2 class=\"wp-block-heading\">Security</h2>\n<!-- /wp:heading -->\n\n<!-- wp:paragraph -->\n<p>The security of your Personal Information is important to us, but remember that no method of transmission over the Internet, or method of electronic storage, is 100% secure. While we strive to use commercially acceptable means to protect your Personal Information, we cannot guarantee its absolute security.</p>\n<!-- /wp:paragraph -->\n\n<!-- wp:heading -->\n<h2 class=\"wp-block-heading\">Changes To This Privacy Policy</h2>\n<!-- /wp:heading -->\n\n<!-- wp:paragraph -->\n<p>This Privacy Policy is effective as of January, 2020 and will remain in effect except with respect to any changes in its provisions in the future, which will be in effect immediately after being posted on this page. We reserve the right to update or change our Privacy Policy at any time and you should check this Privacy Policy periodically. Your continued use of the Service after we post any modifications to the Privacy Policy on this page will constitute your acknowledgment of the modifications and your consent to abide and be bound by the modified Privacy Policy.</p>\n<!-- /wp:paragraph -->\n\n<!-- wp:paragraph -->\n<p>If we make any material changes to this Privacy Policy, we will notify you either through the email address you have provided us, or by placing a prominent notice on our website.</p>\n<!-- /wp:paragraph -->\n\n<!-- wp:heading -->\n<h2 class=\"wp-block-heading\">Contact Us</h2>\n<!-- /wp:heading -->\n\n<!-- wp:paragraph -->\n<p>If you have any questions regarding this Privacy Policy or the practices of this Site, or wish to withdraw your consent for the continued collection, use or disclosure of your Personal Information, please contact us by sending an email to admin@44i.com.</p>\n<!-- /wp:paragraph -->"
+  }
+}

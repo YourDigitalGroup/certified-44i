@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sample Lesson — CERTIFIED.44i</title>
+<meta name="description" content="A representative CERTIFIED.44i lesson and quiz.">
+<link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap">
+    <nav class="nav" aria-label="Primary">
+      <a class="brand" href="index.html">
+        <img class="brand__mark" src="assets/img/logomark.svg" alt="">
+        <span>CERTIFIED<em>.44i</em></span>
+      </a>
+      <button class="nav__toggle" aria-label="Menu" aria-expanded="false"><span></span><span></span><span></span></button>
+      <div class="nav__links"><a class="nav-link" href="courses.html">Courses</a><a class="nav-link" href="certificates.html">Certifications</a><a class="nav-link" href="instructors.html">Instructors</a><a class="nav-link" href="certificates.html#verify">Verify</a></div>
+      <div class="nav__cta">
+        <a class="btn btn--ghost-light btn--sm" href="#" aria-disabled="true">Sign in</a>
+        <a class="btn btn--primary btn--sm" href="courses.html">Start training</a>
+      </div>
+    </nav>
+  </div>
+</header>
+<main>
+
+<section class="page-hero" style="padding-bottom:34px">
+  <div class="wrap">
+    <div class="crumbs"><a href="index.html">Home</a> / <a href="courses.html">Courses</a> / Sample lesson</div>
+    <h1 style="font-size:clamp(1.8rem,3vw,2.4rem)">Your Digital Agency — Video</h1>
+    <p class="lead">A representative section: watch the training video, then pass the quiz to advance.</p>
+  </div>
+</section>
+<section class="section">
+  <div class="wrap split">
+    <div>
+      <div class="player">
+        <div class="player__play" role="button" tabindex="0" aria-label="Play video"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></div>
+        <span class="player__label">Section training video &middot; 12 min</span>
+      </div>
+      <h2 style="margin-top:34px">About this section</h2>
+      <p style="color:var(--muted)">To successfully complete each section and attain certification, you view a concise topical video and then complete a quiz. A perfect score is required for advancement in the Process track. You may rewatch videos as needed and must watch them in order. On completing a section you're authorized to print your digital certificate.</p>
+
+      <h2 id="quiz" style="margin-top:40px">Section quiz</h2>
+      <p style="color:var(--muted);margin-bottom:18px">Answer every question correctly to advance.</p>
+      <div class="quiz" id="quiz-widget">
+        <div class="quiz__head"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9.1 9a3 3 0 1 1 4 2.8c-.9.4-1.6 1.2-1.6 2.2"/><circle cx="12" cy="18" r="0.6" fill="currentColor" stroke="none"/></svg><b>Your Digital Agency Quiz</b><span id="quiz-progress" style="margin-left:auto;color:var(--muted);font-size:.85rem"></span></div>
+        <div class="quiz__body">
+          <div class="quiz__q" id="quiz-question"></div>
+          <div class="quiz__opts" id="quiz-options"></div>
+        </div>
+        <div class="quiz__foot">
+          <button class="btn btn--dark btn--sm" id="quiz-next" type="button">Next question</button>
+          <span class="quiz__score" id="quiz-score"></span>
+        </div>
+      </div>
+    </div>
+    <aside>
+      <div class="sticky-card"><div class="sticky-card__body">
+        <h3 style="margin-top:0">Section progress</h3>
+        <ul class="meta-list">
+          <li><span><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg> Watch the video</span><b style="color:var(--ok)">Ready</b></li>
+          <li><span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9.1 9a3 3 0 1 1 4 2.8c-.9.4-1.6 1.2-1.6 2.2"/><circle cx="12" cy="18" r="0.6" fill="currentColor" stroke="none"/></svg> Pass the quiz</span><b style="color:var(--muted)">Locked</b></li>
+          <li><span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="5"/><path d="M8.2 12.5 7 22l5-3 5 3-1.2-9.5"/></svg> Next section</span><b style="color:var(--muted)">Locked</b></li>
+        </ul>
+        <p class="note" style="margin-top:16px">This is a front-end demo. The live LMS gates each step and tracks real progress per learner.</p>
+      </div></div>
+    </aside>
+  </div>
+</section>
+</main>
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer__grid">
+      <div class="footer__brand">
+        <a class="brand" href="index.html" style="margin-bottom:14px">
+          <img class="brand__mark" src="assets/img/logomark.svg" alt="">
+          <span>CERTIFIED<em>.44i</em></span>
+        </a>
+        <p>The digital certification portal from 44&nbsp;Interactive. Learn the process, master the products, and earn credentials that prove it.</p>
+      </div>
+      <div>
+        <h4>Courses</h4>
+        <a href="course-101-process-certification.html">Process Certification</a><a href="course-101-products-certification.html">101 - Products Certification</a><a href="course-201-products-certification.html">201 - Products Certification</a><a href="course-packages-certification.html">Packages Certification</a>
+      </div>
+      <div>
+        <h4>Credentials</h4>
+        <a href="certificates.html">Certifications</a>
+        <a href="certificates.html#verify">Verify a certificate</a>
+        <a href="instructors.html">Instructors</a>
+      </div>
+      <div>
+        <h4>Company</h4>
+        <a href="https://44interactive.com" rel="noopener">44 Interactive</a>
+        <a href="privacy.html">Privacy Policy</a>
+        <a href="terms.html">Terms &amp; Conditions</a>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <span>&copy; <span data-year>2026</span> 44 Interactive. All rights reserved.</span>
+      <span>Static rebuild of CERTIFIED.44i</span>
+    </div>
+  </div>
+</footer>
+<script src="assets/js/main.js"></script>
+<script src="assets/js/quiz.js"></script>
+</body>
+</html>

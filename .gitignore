@@ -1,0 +1,15 @@
+# Dependencies / build tooling (only needed for local screenshots)
+node_modules/
+package.json
+package-lock.json
+
+# Generated preview screenshots
+scripts/shot-*.png
+scripts/*.mjs
+
+# OS / editor
+.DS_Store
+Thumbs.db
+*.swp
+.vscode/
+.idea/
