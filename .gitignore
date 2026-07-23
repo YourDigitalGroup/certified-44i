@@ -7,6 +7,9 @@ package-lock.json
 scripts/shot-*.png
 scripts/*.mjs
 
+# Local reference copies (source lives in main at .oldsite/)
+scripts/oldsite-*.css
+
 # OS / editor
 .DS_Store
 Thumbs.db
