@@ -113,8 +113,36 @@
     return { course: course.data, blocks: list };
   }
 
+  async function getBlock(blockId) {
+    var r = await sb.from("blocks")
+      .select("id,slug,title,duration_minutes,course_id,video_url,video_provider")
+      .eq("id", blockId).maybeSingle();
+    if (r.error) throw r.error;
+    return r.data;
+  }
+
+  // Learner-safe quiz (options without the correct flag), via the get_quiz RPC.
+  async function getQuizForBlock(blockId) {
+    var qz = await sb.from("quizzes").select("id").eq("block_id", blockId).maybeSingle();
+    if (qz.error) throw qz.error;
+    if (!qz.data) return null;
+    var r = await sb.rpc("get_quiz", { p_quiz_id: qz.data.id });
+    if (r.error) throw r.error;
+    return r.data; // {quiz_id,title,block_id,questions:[{id,prompt,q_type,options:[{id,label}]}]}
+  }
+
+  // Server-side graded (100% to pass). Writes progress for the active AE.
+  async function submitQuiz(quizId, answers) {
+    var r = await clientForActiveAE().rpc("submit_quiz", { p_quiz_id: quizId, p_answers: answers });
+    if (r.error) throw r.error;
+    return r.data; // {passed, score, total, correct}
+  }
+
   window.Certified = {
     raw: sb,
+    getBlock: getBlock,
+    getQuizForBlock: getQuizForBlock,
+    submitQuiz: submitQuiz,
     clientForActiveAE: clientForActiveAE,
     getSession: getSession,
     groupLogin: groupLogin,
