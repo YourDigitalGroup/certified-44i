@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Section — CERTIFIED.44i</title>
+<link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap">
+    <nav class="nav" aria-label="Primary">
+      <a class="brand" href="index.html">
+        <img class="brand__mark" src="assets/img/logomark.svg" alt="">
+        <span>CERTIFIED<em>.44i</em></span>
+      </a>
+      <div class="nav__cta" style="margin-left:auto">
+        <a class="btn btn--ghost-light btn--sm" href="learn.html">← My Training</a>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<main>
+<section class="page-hero" style="padding:40px 0 32px">
+  <div class="wrap">
+    <div class="crumbs"><a href="learn.html">My Training</a> / Section</div>
+    <h1 id="block-title" style="font-size:clamp(1.5rem,3vw,2rem)">Loading…</h1>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap" style="max-width:820px">
+    <!-- Video -->
+    <div class="player" id="player">
+      <div class="player__play" role="button" tabindex="0" aria-label="Play video">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+      </div>
+      <span class="player__label" id="player-label">Section training video</span>
+    </div>
+
+    <!-- Quiz -->
+    <h2 id="quiz-heading" style="margin-top:40px">Section quiz</h2>
+    <p style="color:var(--muted);margin-bottom:18px">Answer every question. You must score <b>100%</b> to complete this section.</p>
+
+    <div class="quiz" id="quiz">
+      <div class="quiz__head">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9.1 9a3 3 0 1 1 4 2.8c-.9.4-1.6 1.2-1.6 2.2"/><circle cx="12" cy="18" r="0.6" fill="currentColor" stroke="none"/></svg>
+        <b id="quiz-title">Quiz</b>
+      </div>
+      <div class="quiz__body" id="quiz-body">
+        <p style="color:var(--muted)">Loading quiz…</p>
+      </div>
+      <div class="quiz__foot">
+        <button class="btn btn--primary btn--sm" id="submit-btn" type="button" disabled>Submit answers</button>
+        <span class="quiz__score" id="quiz-score"></span>
+      </div>
+    </div>
+
+    <div id="result" style="margin-top:20px"></div>
+  </div>
+</section>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="assets/js/config.js"></script>
+<script src="assets/js/app.js"></script>
+<script>
+(function () {
+  function qparam(n) { return new URLSearchParams(location.search).get(n); }
+  function esc(s) { return String(s).replace(/[&<>"]/g, function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];}); }
+
+  var blockId = qparam("block");
+  var quiz = null;
+
+  document.querySelector(".player__play").addEventListener("click", function () {
+    document.getElementById("player-label").textContent =
+      "Demo player — in the live platform this streams the section's training video.";
+  });
+
+  async function main() {
+    var session = await Certified.getSession();
+    var ae = Certified.getActiveAE();
+    if (!session || !ae) { window.location.href = "login.html"; return; }
+    if (!blockId) { window.location.href = "learn.html"; return; }
+
+    var block = await Certified.getBlock(blockId);
+    if (!block) { document.getElementById("block-title").textContent = "Section not found"; return; }
+    document.getElementById("block-title").textContent = block.title;
+    document.getElementById("player-label").textContent =
+      "Section training video" + (block.duration_minutes ? " · " + block.duration_minutes + " min" : "");
+
+    quiz = await Certified.getQuizForBlock(blockId);
+    var body = document.getElementById("quiz-body");
+    if (!quiz || !quiz.questions || !quiz.questions.length) {
+      document.getElementById("quiz-title").textContent = "Quiz";
+      body.innerHTML = "<p style='color:var(--muted)'>No quiz questions are set up for this section yet.</p>";
+      return;
+    }
+    document.getElementById("quiz-title").textContent = quiz.title || "Quiz";
+    renderQuiz(quiz);
+  }
+
+  function renderQuiz(q) {
+    var body = document.getElementById("quiz-body");
+    body.innerHTML = "";
+    q.questions.forEach(function (qu, qi) {
+      var multi = qu.q_type === "multiple";
+      var type = multi ? "checkbox" : "radio";
+      var block = document.createElement("div");
+      block.style.marginBottom = "22px";
+      var opts = qu.options.map(function (o) {
+        return '<label class="opt" style="margin-bottom:8px">' +
+          '<input type="' + type + '" name="q' + qi + '" value="' + o.id + '">' +
+          '<span>' + esc(o.label) + '</span></label>';
+      }).join("");
+      block.innerHTML = '<div class="quiz__q">' + (qi + 1) + '. ' + esc(qu.prompt) + '</div>' +
+        '<div class="quiz__opts" data-qid="' + qu.id + '">' + opts + '</div>';
+      body.appendChild(block);
+    });
+    var submit = document.getElementById("submit-btn");
+    submit.disabled = false;
+    body.addEventListener("change", function () {
+      // enable submit only when every question has a selection
+      var groups = body.querySelectorAll(".quiz__opts");
+      var all = Array.prototype.every.call(groups, function (g) {
+        return g.querySelector("input:checked");
+      });
+      submit.disabled = !all;
+    });
+  }
+
+  document.getElementById("submit-btn").addEventListener("click", async function () {
+    var btn = this;
+    btn.disabled = true; btn.textContent = "Grading…";
+    var answers = [];
+    document.querySelectorAll("#quiz-body .quiz__opts").forEach(function (g) {
+      var ids = Array.prototype.map.call(g.querySelectorAll("input:checked"), function (i) { return i.value; });
+      answers.push({ question_id: g.getAttribute("data-qid"), option_ids: ids });
+    });
+    try {
+      var res = await Certified.submitQuiz(quiz.quiz_id, answers);
+      document.getElementById("quiz-score").textContent = (res.score || 0) + "%";
+      var out = document.getElementById("result");
+      if (res.passed) {
+        out.innerHTML = '<div class="result-card result-card--ok" style="background:rgba(46,158,91,.12);border:1px solid rgba(46,158,91,.4)">' +
+          '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2e9e5b" stroke-width="2.4"><path d="M20 6 9 17l-5-5"/></svg>' +
+          '<div><b style="color:var(--ink)">Section complete — 100%</b>' +
+          '<small style="color:var(--muted)">Nice work. The next section is now unlocked.</small></div></div>' +
+          '<a class="btn btn--primary" href="learn.html" style="margin-top:16px">Back to my training →</a>';
+        document.getElementById("quiz-body").style.opacity = ".5";
+        btn.style.display = "none";
+      } else {
+        out.innerHTML = '<div class="result-card result-card--bad" style="background:rgba(217,80,40,.1);border:1px solid rgba(217,80,40,.4)">' +
+          '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#d95028" stroke-width="2.4"><circle cx="12" cy="12" r="9"/><path d="M15 9l-6 6M9 9l6 6"/></svg>' +
+          '<div><b style="color:var(--ink)">' + (res.correct || 0) + ' of ' + (res.total || 0) + ' correct (' + (res.score||0) + '%)</b>' +
+          '<small style="color:var(--muted)">This section requires 100%. Rewatch the video and try again.</small></div></div>';
+        btn.disabled = false; btn.textContent = "Try again";
+      }
+    } catch (e) {
+      document.getElementById("result").innerHTML =
+        '<p class="note" style="background:#fdecea;border-color:#f5c6c2;border-left-color:#d95028;color:#8a2a17">' + esc(e.message || String(e)) + '</p>';
+      btn.disabled = false; btn.textContent = "Submit answers";
+    }
+  });
+
+  main().catch(function (e) {
+    document.getElementById("block-title").textContent = "Something went wrong";
+    document.getElementById("quiz-body").innerHTML =
+      "<p class='note' style='background:#fdecea;border-color:#f5c6c2;border-left-color:#d95028;color:#8a2a17'>" +
+      (e.message || String(e)) + "</p>";
+  });
+})();

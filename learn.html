@@ -100,18 +100,23 @@
                        : "<span class='type'>Locked</span>");
       var row = document.createElement("div");
       row.className = "acc";
-      row.innerHTML =
-        '<div class="acc__head" style="cursor:default">' +
-          '<span class="acc__idx">' + (i + 1) + '</span>' +
-          '<span>' + b.title.replace(/[&<>]/g, "") + '</span>' +
-          '<span class="acc__count">' + icon + " " + right + '</span>' +
-        '</div>';
+      var inner =
+        '<span class="acc__idx">' + (i + 1) + '</span>' +
+        '<span>' + b.title.replace(/[&<>]/g, "") + '</span>' +
+        '<span class="acc__count">' + icon + " " + right + '</span>';
+      if (b.available || b.completed) {
+        row.innerHTML = '<a class="acc__head" style="text-decoration:none;color:inherit" href="lesson.html?block=' + b.id + '">' + inner + '</a>';
+      } else {
+        row.innerHTML = '<div class="acc__head" style="cursor:not-allowed;opacity:.6">' + inner + '</div>';
+      }
       wrap.appendChild(row);
     });
 
     var notice = document.getElementById("notice");
-    notice.style.display = "block";
-    notice.innerHTML = "<b>Preview build.</b> Sign-in, your group, your name, and your real progress are live from the database. The <b>video player and 100%-quiz step</b> are the next build (they need one more database function, coming next).";
+    if (total && done < total) {
+      notice.style.display = "block";
+      notice.innerHTML = "Open the <b>Ready</b> section to watch its video and take the quiz. You must score <b>100%</b> to unlock the next section.";
+    }
   }
 
   main().catch(function (e) {
