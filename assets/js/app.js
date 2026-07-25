@@ -39,8 +39,20 @@
   }
   function clearActiveAE() { sessionStorage.removeItem(AE_KEY); sbForAE = null; }
 
+  // Never let an await hang the page forever — surface a clear error instead.
+  function withTimeout(p, ms, label) {
+    return Promise.race([
+      Promise.resolve(p),
+      new Promise(function (_, rej) {
+        setTimeout(function () {
+          rej(new Error((label || "Request") + " timed out. Check your connection and reload."));
+        }, ms);
+      }),
+    ]);
+  }
+
   async function getSession() {
-    var r = await sb.auth.getSession();
+    var r = await withTimeout(sb.auth.getSession(), 8000, "Sign-in check");
     return r.data.session;
   }
 
@@ -114,9 +126,11 @@
   }
 
   async function getBlock(blockId) {
-    var r = await sb.from("blocks")
-      .select("id,slug,title,duration_minutes,course_id,video_url,video_provider")
-      .eq("id", blockId).maybeSingle();
+    var r = await withTimeout(
+      sb.from("blocks")
+        .select("id,slug,title,duration_minutes,course_id,video_url,video_provider")
+        .eq("id", blockId).maybeSingle(),
+      8000, "Loading section");
     if (r.error) throw r.error;
     return r.data;
   }
