@@ -9,9 +9,13 @@
     return;
   }
 
+  // A no-op lock avoids the cross-tab navigator.locks deadlock that can make
+  // auth calls (getSession) hang forever when multiple tabs are open.
+  function noopLock(name, acquireTimeout, fn) { return fn(); }
+
   // Base client (anon). Persists the group session in localStorage.
   var sb = window.supabase.createClient(cfg.SUPABASE_URL, cfg.SUPABASE_ANON_KEY, {
-    auth: { persistSession: true, autoRefreshToken: true },
+    auth: { persistSession: true, autoRefreshToken: true, lock: noopLock },
   });
 
   // A client variant that also sends the selected AE id as a header, so the
@@ -22,7 +26,7 @@
     if (!ae) return sb;
     if (!sbForAE || sbForAE.__aeId !== ae.id) {
       sbForAE = window.supabase.createClient(cfg.SUPABASE_URL, cfg.SUPABASE_ANON_KEY, {
-        auth: { persistSession: true, autoRefreshToken: true },
+        auth: { persistSession: true, autoRefreshToken: true, lock: noopLock },
         global: { headers: { "x-ae-id": ae.id } },
       });
       sbForAE.__aeId = ae.id;
@@ -39,8 +43,20 @@
   }
   function clearActiveAE() { sessionStorage.removeItem(AE_KEY); sbForAE = null; }
 
+  // Never let an await hang the page forever — surface a clear error instead.
+  function withTimeout(p, ms, label) {
+    return Promise.race([
+      Promise.resolve(p),
+      new Promise(function (_, rej) {
+        setTimeout(function () {
+          rej(new Error((label || "Request") + " timed out. Check your connection and reload."));
+        }, ms);
+      }),
+    ]);
+  }
+
   async function getSession() {
-    var r = await sb.auth.getSession();
+    var r = await withTimeout(sb.auth.getSession(), 8000, "Sign-in check");
     return r.data.session;
   }
 
@@ -114,9 +130,11 @@
   }
 
   async function getBlock(blockId) {
-    var r = await sb.from("blocks")
-      .select("id,slug,title,duration_minutes,course_id,video_url,video_provider")
-      .eq("id", blockId).maybeSingle();
+    var r = await withTimeout(
+      sb.from("blocks")
+        .select("id,slug,title,duration_minutes,course_id,video_url,video_provider")
+        .eq("id", blockId).maybeSingle(),
+      8000, "Loading section");
     if (r.error) throw r.error;
     return r.data;
   }
