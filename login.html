@@ -9,6 +9,18 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/css/styles.css">
+<style>
+  .name-choice {
+    width: 100%; display: flex; align-items: center; justify-content: space-between;
+    gap: 12px; padding: 16px 18px; margin-bottom: 10px;
+    background: #fff; border: 1.5px solid var(--line); border-radius: 12px;
+    font-size: 1.05rem; font-weight: 700; color: var(--ink); text-align: left;
+    cursor: pointer; transition: border-color .15s, box-shadow .15s, background .15s;
+  }
+  .name-choice:hover { border-color: var(--accent-600); background: var(--paper-2); box-shadow: 0 2px 10px rgba(0,0,0,.06); }
+  .name-choice:disabled { opacity: .6; cursor: default; }
+  .name-choice__go { color: var(--accent-600); font-size: 1.25rem; font-weight: 800; }
+</style>
 </head>
 <body>
 <header class="site-header">
@@ -61,8 +73,8 @@
 </main>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="assets/js/config.js?v=20260725b"></script>
-<script src="assets/js/app.js?v=20260725b"></script>
+<script src="assets/js/config.js?v=20260725c"></script>
+<script src="assets/js/app.js?v=20260725c"></script>
 <script>
 (function () {
   var stepGroup = document.getElementById("step-group");
@@ -102,11 +114,13 @@
     }
     aes.forEach(function (ae) {
       var b = document.createElement("button");
-      b.className = "opt";
-      b.style.width = "100%";
-      b.style.marginBottom = "8px";
-      b.innerHTML = "<span>" + ae.full_name.replace(/[&<>]/g, "") + "</span>";
+      b.type = "button";
+      b.className = "name-choice";
+      b.innerHTML = "<span>" + ae.full_name.replace(/[&<>]/g, "") +
+        "</span><span class='name-choice__go' aria-hidden='true'>&rarr;</span>";
       b.addEventListener("click", function () {
+        b.disabled = true;
+        b.querySelector(".name-choice__go").textContent = "…";
         Certified.setActiveAE({ id: ae.id, full_name: ae.full_name });
         window.location.href = "learn.html";
       });
@@ -121,9 +135,6 @@
     stepName.classList.add("hidden");
     stepGroup.classList.remove("hidden");
   });
-
-  // If already signed in, jump straight to name selection.
-  Certified.getSession().then(function (s) { if (s) showNameStep(); });
 })();
 </script>
 </body>
