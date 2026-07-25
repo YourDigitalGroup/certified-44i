@@ -20,7 +20,7 @@ import { readFileSync } from 'node:fs';
 
 const URL = process.env.SUPABASE_URL;
 const KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
-const DOMAIN = process.env.GROUP_EMAIL_DOMAIN || 'groups.certified.44i';
+const DOMAIN = process.env.GROUP_EMAIL_DOMAIN || 'groups.certified.44i.com';
 if (!URL || !KEY) { console.error('Set SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY'); process.exit(1); }
 
 const arg = (name, def) => {

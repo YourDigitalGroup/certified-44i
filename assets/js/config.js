@@ -7,5 +7,7 @@ window.CERTIFIED_CONFIG = {
   SUPABASE_ANON_KEY:
     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNqbmlrb3FvbG1vY2h2dWJ6ZWp2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQ4MzQ1NTksImV4cCI6MjEwMDQxMDU1OX0.d0RtbEMTiiaeIgdDvmG6ItqghPXl-zw9ZwycGG9H3K8",
   // Domain used to build each group's login email: <group-slug>@<domain>
-  GROUP_EMAIL_DOMAIN: "groups.certified.44i",
+  // Must be a real TLD (Supabase rejects invalid ones like ".44i"); these are
+  // synthetic login addresses, not real inboxes.
+  GROUP_EMAIL_DOMAIN: "groups.certified.44i.com",
 };
