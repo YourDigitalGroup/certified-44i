@@ -26,7 +26,7 @@ scripts/
 ## How the login model works
 
 - **No individual AE logins.** Each **group** is backed by one Supabase Auth
-  user (email `‹slug›@groups.certified.44i`, password = the group's shared
+  user (email `‹slug›@groups.certified.44i.com`, password = the group's shared
   password from your unified system). AEs "log in as the group," then pick
   their name from the group roster.
 - **Account Managers** (your 3 trainers) each get a real Auth user with
