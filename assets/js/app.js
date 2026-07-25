@@ -9,9 +9,13 @@
     return;
   }
 
+  // A no-op lock avoids the cross-tab navigator.locks deadlock that can make
+  // auth calls (getSession) hang forever when multiple tabs are open.
+  function noopLock(name, acquireTimeout, fn) { return fn(); }
+
   // Base client (anon). Persists the group session in localStorage.
   var sb = window.supabase.createClient(cfg.SUPABASE_URL, cfg.SUPABASE_ANON_KEY, {
-    auth: { persistSession: true, autoRefreshToken: true },
+    auth: { persistSession: true, autoRefreshToken: true, lock: noopLock },
   });
 
   // A client variant that also sends the selected AE id as a header, so the
@@ -22,7 +26,7 @@
     if (!ae) return sb;
     if (!sbForAE || sbForAE.__aeId !== ae.id) {
       sbForAE = window.supabase.createClient(cfg.SUPABASE_URL, cfg.SUPABASE_ANON_KEY, {
-        auth: { persistSession: true, autoRefreshToken: true },
+        auth: { persistSession: true, autoRefreshToken: true, lock: noopLock },
         global: { headers: { "x-ae-id": ae.id } },
       });
       sbForAE.__aeId = ae.id;
