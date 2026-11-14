@@ -17,6 +17,7 @@ await run('stubs: roles + auth', `
   do $$ begin
     if not exists (select from pg_roles where rolname='anon') then create role anon; end if;
     if not exists (select from pg_roles where rolname='authenticated') then create role authenticated; end if;
+    if not exists (select from pg_roles where rolname='service_role') then create role service_role; end if;
   end $$;
   create schema if not exists auth;
   create table auth.users (id uuid primary key default gen_random_uuid(), email text);
@@ -31,6 +32,7 @@ await run('stubs: roles + auth', `
 const migrations = [
   '0001_content','0002_people','0003_progress',
   '0004_functions','0005_rls','0006_verification_reporting',
+  '0007_playbook_link',
 ];
 for (const m of migrations) {
   let sql = read(`supabase/migrations/${m}.sql`)
@@ -98,6 +100,57 @@ const vOk  = await q(`select public.verify_certificate('${cert.code}') v`);
 const vBad = await q(`select public.verify_certificate('NOPE-CODE') v`);
 console.log('  verify(valid):', JSON.stringify(vOk.v));
 console.log('  verify(bad)  :', JSON.stringify(vBad.v));
+
+// ---- The link to Fourge Playbook: the roster in, the certificates out ----
+console.log('\nPlaybook link:');
+const same = (label, got, want) => {
+  // jsonb hands its keys back sorted, so both sides are compared with their keys in one order.
+  const canon = (v) => JSON.stringify(v, (_, x) => (x && typeof x === 'object' && !Array.isArray(x) ? Object.fromEntries(Object.entries(x).sort(([k1], [k2]) => (k1 < k2 ? -1 : 1))) : x));
+  const ok = canon(got) === canon(want);
+  console.log(ok ? '  ✓' : '  ✗', label, ok ? '' : `\n     got  ${JSON.stringify(got)}\n     want ${JSON.stringify(want)}`);
+  if (!ok) throw new Error(`Playbook link: ${label}`);
+};
+const roster = {
+  groups: [
+    { external_ref: 'G1', name: 'acme partner' },          // set up by hand above: linked by name
+    { external_ref: 'G2', name: 'Bluff City Media' },      // new
+    { external_ref: 'G3', name: 'Bluff City Media!' },     // new, and its slug must not collide
+    { external_ref: '', name: 'No Id' },                   // skipped
+  ],
+  aes: [
+    { external_ref: 'A1', group_ref: 'G1', full_name: 'present rep', email: 'P@X.com' },  // linked by name
+    { external_ref: 'A2', group_ref: 'G2', full_name: 'New Person', email: null },        // new
+    { external_ref: 'A3', group_ref: 'NOPE', full_name: 'Lost Soul', email: null },       // no such group: skipped
+  ],
+};
+const sync = async (r) => (await q(`select public.playbook_roster_sync('${JSON.stringify(r.groups)}'::jsonb, '${JSON.stringify(r.aes)}'::jsonb) r`)).r;
+same('first pass files the roster', await sync(roster),
+  { groups_new: 2, groups_linked: 1, aes_new: 1, aes_linked: 1, aes_updated: 0, skipped: 2 });
+same('a second pass changes nothing', await sync(roster),
+  { groups_new: 0, groups_linked: 0, aes_new: 0, aes_linked: 0, aes_updated: 0, skipped: 2 });
+same('slugs made from the names, none shared',
+  (await db.query(`select slug from groups where external_ref in ('G2','G3') order by external_ref`)).rows.map((r) => r.slug),
+  ['bluff-city-media', 'bluff-city-media-2']);
+same('the hand-made rows carry their ids now, and the email',
+  await q(`select g.external_ref g, ae.external_ref a, ae.email from account_executives ae join groups g on g.id=ae.group_id where ae.id='bbbbbbbb-0000-0000-0000-000000000001'`),
+  { g: 'G1', a: 'A1', email: 'p@x.com' });
+same('an AE who moves group and changes name is followed',
+  await sync({ groups: [], aes: [{ external_ref: 'A2', group_ref: 'G1', full_name: 'New Person-Smith', email: 'n@x.com' }] }),
+  { groups_new: 0, groups_linked: 0, aes_new: 0, aes_linked: 0, aes_updated: 1, skipped: 0 });
+same('a name another AE of the group holds is not taken',
+  [await sync({ groups: [], aes: [{ external_ref: 'A2', group_ref: 'G1', full_name: 'Absent Rep', email: null }] }),
+   (await q(`select full_name from account_executives where external_ref='A2'`)).full_name],
+  [{ groups_new: 0, groups_linked: 0, aes_new: 0, aes_linked: 0, aes_updated: 0, skipped: 0 }, 'New Person-Smith']);
+const certs = (await q(`select public.playbook_certifications() r`)).r;
+same('the valid certificate goes out by the AE id', certs.map((c) => [c.ae_ref, c.certificates.map((x) => [x.course, x.title, x.order, x.code])]),
+  [['A1', [['process-certification', 'Process Certification', 1, cert.code]]]]);
+await db.exec(`update certificates set status='revoked' where code='${cert.code}'`);
+same('a revoked certificate does not', (await q(`select public.playbook_certifications() r`)).r, []);
+await db.exec(`update certificates set status='valid' where code='${cert.code}'`);
+same('only the Playbook server may call either',
+  (await db.query(`select p.proname, has_function_privilege('anon', p.oid, 'execute') anon, has_function_privilege('authenticated', p.oid, 'execute') authd, has_function_privilege('service_role', p.oid, 'execute') svc
+     from pg_proc p where p.proname in ('playbook_roster_sync','playbook_certifications') order by 1`)).rows,
+  [{ proname: 'playbook_certifications', anon: false, authd: false, svc: true }, { proname: 'playbook_roster_sync', anon: false, authd: false, svc: true }]);
 
 // ---- Server-side quiz grading via submit_quiz ----
 console.log('\nQuiz grading (submit_quiz):');
