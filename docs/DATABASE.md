@@ -15,6 +15,7 @@ supabase/
     0004_functions.sql            identity helpers, quiz grading, session credit, cert issuance
     0005_rls.sql                  row-level security policies
     0006_verification_reporting.sql  public cert verification + reporting views
+    0007_playbook_link.sql        the roster in from Fourge Playbook, the certificates out to it
   seed.sql                        Process Certification content (9 blocks)
 data/
   *.example.csv                   templates for your import
@@ -86,10 +87,40 @@ npm run provision
 - `select public.verify_certificate('BADCODE');` → `{"found": false}`
 - Reporting: `select * from public.v_group_summary;`
 
+## The link to Fourge Playbook (migration 0007)
+
+Fourge Playbook builds the proposals an Account Executive presents. It shows a
+badge on every proposal by an AE who holds a valid certificate here. For that,
+both systems must know an AE by the same id: the order system's.
+
+- **The roster comes in from the Playbook, every hour.** The Playbook mirrors
+  the order system (the master for groups and AEs) and calls
+  `playbook_roster_sync(groups, aes)`. Each group and AE is filed here with
+  `external_ref` = its id in the order system. A group or an AE set up by hand
+  before the link is matched by name (an AE: the same name under the same
+  group) and given its id. A name or an email that changes in the order system
+  changes here; an AE who moves group moves here. **Nothing is ever deleted**,
+  so no progress and no certificate is ever lost to a roster change.
+- **The certificates go out to the Playbook.** `playbook_certifications()`
+  returns every `valid` certificate by the AE's order-system id, in course
+  order. A revoked certificate drops off the AE's proposals within the hour.
+- **Only the Playbook's server can call either** (`service_role`). No browser,
+  no group login and no anonymous caller can.
+- **A group filed by the sync has no login yet.** Its slug is made from its
+  name; make its login the usual way (`scripts/provision.mjs` with that slug in
+  `groups.csv`, which leaves the row and its AEs as they are, or the Auth
+  dashboard). Until then its AEs are on the roster and cannot sign in.
+- **Two AEs of one group under one name** cannot both be filed (the roster is
+  one name a group). The second is skipped and counted, and the Playbook's sync
+  reports the count.
+
+Nothing in this repo holds a key for the link. The Playbook holds this
+project's service-role key as a secret of its own.
+
 ## Local smoke test (no Supabase needed)
 `npm run db:validate` loads every migration + the seed into an in-memory
-Postgres (WASM) and exercises the session-credit, certificate, verification, and
-quiz-grading logic. Use it after editing any SQL.
+Postgres (WASM) and exercises the session-credit, certificate, verification,
+Playbook-link and quiz-grading logic. Use it after editing any SQL.
 
 ## Notes
 - **Quiz questions:** the source export didn't include the real question sets,

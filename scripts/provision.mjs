@@ -89,7 +89,9 @@ async function main() {
   for (const g of load(files.groups)) {
     if (!g.slug) continue;
     const { data: grp, error } = await sb.from('groups')
-      .upsert({ slug: g.slug, name: g.name, external_ref: g.external_ref || null },
+      // A blank external_ref in the CSV leaves the one on file alone: the Playbook's roster sync puts the order
+      // system's id there (migration 0007), and a login made for that group must not wipe it.
+      .upsert({ slug: g.slug, name: g.name, ...(g.external_ref ? { external_ref: g.external_ref } : {}) },
               { onConflict: 'slug' })
       .select('id').single();
     if (error) throw error;
@@ -121,8 +123,9 @@ async function main() {
     const gid = groupIdBySlug[a.group_slug];
     if (!gid) { console.warn('  AE skipped (unknown group):', a.full_name, a.group_slug); continue; }
     const { error } = await sb.from('account_executives')
-      .upsert({ group_id: gid, full_name: a.full_name, email: a.email || null,
-                external_ref: a.external_ref || null },
+      // The same for an AE: a blank email or external_ref leaves what the roster sync filed.
+      .upsert({ group_id: gid, full_name: a.full_name, ...(a.email ? { email: a.email } : {}),
+                ...(a.external_ref ? { external_ref: a.external_ref } : {}) },
               { onConflict: 'group_id,full_name' });
     if (error) throw error;
     aeCount++;
