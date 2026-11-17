@@ -16,6 +16,7 @@ supabase/
     0005_rls.sql                  row-level security policies
     0006_verification_reporting.sql  public cert verification + reporting views
     0007_playbook_link.sql        the roster in from Fourge Playbook, the certificates out to it
+    0008_course_badges.sql        which badge a course awards
   seed.sql                        Process Certification content (9 blocks)
 data/
   *.example.csv                   templates for your import
@@ -113,6 +114,29 @@ both systems must know an AE by the same id: the order system's.
 - **Two AEs of one group under one name** cannot both be filed (the roster is
   one name a group). The second is skipped and counted, and the Playbook's sync
   reports the count.
+
+### Which badge a course awards (migration 0008)
+
+The Playbook draws the program's badge artwork on a certified AE's proposals.
+The pairing, settled on 2026-11-17:
+
+| Course completed | Badge |
+|------------------|-------|
+| 101 Products | Online Visibility and Content Marketing |
+| 201 Products | Targeted Digital |
+| Every course | Digital Marketing Professional |
+| Process, Packages | none on their own |
+
+- A course names its badges in `courses.badge_keys`, by the Playbook's artwork
+  keys: `online-visibility`, `content-marketing`, `targeted-digital`.
+- **The two Products courses get theirs on their own when they are created**,
+  by their name ("101 … Products", "201 … Products"). Any course can be set by
+  hand: `update courses set badge_keys = '{targeted-digital}' where slug = '…';`
+- **Professional is not a course.** An AE has it while they hold a valid
+  certificate for every active course and those courses between them award all
+  three other badges. Until all three can be earned (a course not loaded yet),
+  nobody has it: finishing the only course on file is not finishing the program.
+- A key the Playbook has no artwork for draws nothing there.
 
 Nothing in this repo holds a key for the link. The Playbook holds this
 project's service-role key as a secret of its own.

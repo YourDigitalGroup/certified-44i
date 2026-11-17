@@ -32,7 +32,7 @@ await run('stubs: roles + auth', `
 const migrations = [
   '0001_content','0002_people','0003_progress',
   '0004_functions','0005_rls','0006_verification_reporting',
-  '0007_playbook_link',
+  '0007_playbook_link','0008_course_badges',
 ];
 for (const m of migrations) {
   let sql = read(`supabase/migrations/${m}.sql`)
@@ -142,11 +142,47 @@ same('a name another AE of the group holds is not taken',
    (await q(`select full_name from account_executives where external_ref='A2'`)).full_name],
   [{ groups_new: 0, groups_linked: 0, aes_new: 0, aes_linked: 0, aes_updated: 0, skipped: 0 }, 'New Person-Smith']);
 const certs = (await q(`select public.playbook_certifications() r`)).r;
-same('the valid certificate goes out by the AE id', certs.map((c) => [c.ae_ref, c.certificates.map((x) => [x.course, x.title, x.order, x.code])]),
-  [['A1', [['process-certification', 'Process Certification', 1, cert.code]]]]);
+same('the valid certificate goes out by the AE id, with the badges its course awards (Process: none)',
+  certs.map((c) => [c.ae_ref, c.certificates.map((x) => [x.course, x.title, x.order, x.code, x.badges])]),
+  [['A1', [['process-certification', 'Process Certification', 1, cert.code, []]]]]);
 await db.exec(`update certificates set status='revoked' where code='${cert.code}'`);
 same('a revoked certificate does not', (await q(`select public.playbook_certifications() r`)).r, []);
 await db.exec(`update certificates set status='valid' where code='${cert.code}'`);
+// ---- Which badge a course awards (0008; the pairing settled 2026-11-17) ----
+console.log('\nCourse badges:');
+await db.exec(`
+  insert into courses (id, slug, title, sort_order) values
+    ('dddddddd-0000-0000-0000-000000000002','101-products-certification','101 - Products Certification',2),
+    ('dddddddd-0000-0000-0000-000000000003','201-products-certification','201 - Products Certification',3),
+    ('dddddddd-0000-0000-0000-000000000004','packages-certification','Packages Certification',4);
+`);
+same('the two Products courses take their badges by name; Process and Packages award none',
+  (await db.query(`select slug, badge_keys from courses order by sort_order`)).rows.map((r) => [r.slug, r.badge_keys]),
+  [['process-certification', []], ['101-products-certification', ['online-visibility', 'content-marketing']], ['201-products-certification', ['targeted-digital']], ['packages-certification', []]]);
+const give = (slug, n) => db.exec(`insert into certificates (ae_id, course_id, name_on_certificate, code)
+  select 'bbbbbbbb-0000-0000-0000-000000000001', id, 'Present Rep', 'CODE-${n}' from courses where slug='${slug}'`);
+const mine = async () => (await q(`select public.playbook_certifications() r`)).r.find((c) => c.ae_ref === 'A1').certificates.map((x) => [x.course, x.badges]);
+await give('101-products-certification', 2);
+same('101 Products earns Online Visibility and Content Marketing', await mine(),
+  [['process-certification', []], ['101-products-certification', ['online-visibility', 'content-marketing']]]);
+await give('201-products-certification', 3);
+same('201 Products earns Targeted Digital; three of four courses is not the program', await mine(),
+  [['process-certification', []], ['101-products-certification', ['online-visibility', 'content-marketing']], ['201-products-certification', ['targeted-digital']]]);
+await give('packages-certification', 4);
+const whole = (await q(`select public.playbook_certifications() r`)).r.find((c) => c.ae_ref === 'A1').certificates;
+same('every course complete earns Digital Marketing Professional, last, with no code', whole.slice(-1).map((x) => [x.course, x.title, x.order, x.code, x.badges]),
+  [['digital-marketing-professional', 'Digital Marketing Professional', 5, null, ['professional']]]);
+same('and the four courses stay on the list before it', whole.length, 5);
+await db.exec(`update certificates set status='revoked' where code='CODE-3'`);
+same('a revoked course takes Professional away again', (await mine()).map((x) => x[0]), ['process-certification', '101-products-certification', 'packages-certification']);
+await db.exec(`update certificates set status='valid' where code='CODE-3'`);
+await db.exec(`update courses set is_active=false where slug='packages-certification'; delete from certificates where code='CODE-4';`);
+same('a course switched off is not asked for', (await mine()).slice(-1)[0][0], 'digital-marketing-professional');
+await db.exec(`update courses set is_active=true where slug='packages-certification'`);
+same('a new course with a badge named keeps the one named', (await (async () => { await db.exec(`insert into courses (slug, title, sort_order, badge_keys) values ('x-101-products','101 Products Refresher',9,'{targeted-digital}')`); const r = await q(`select badge_keys from courses where slug='x-101-products'`); await db.exec(`delete from courses where slug='x-101-products'`); return r.badge_keys; })()), ['targeted-digital']);
+// Leave the program as the rest of this script expects it: Process alone.
+await db.exec(`delete from certificates where code like 'CODE-%'; delete from courses where slug <> 'process-certification';`);
+
 same('only the Playbook server may call either',
   (await db.query(`select p.proname, has_function_privilege('anon', p.oid, 'execute') anon, has_function_privilege('authenticated', p.oid, 'execute') authd, has_function_privilege('service_role', p.oid, 'execute') svc
      from pg_proc p where p.proname in ('playbook_roster_sync','playbook_certifications') order by 1`)).rows,
